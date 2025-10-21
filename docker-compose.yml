@@ -1,0 +1,23 @@
+version: '3.9'  # Usa la versión más reciente
+
+services:
+  # 1. Servicio de la API de FastAPI
+  api:
+    # Indica a Compose que use el Dockerfile en el directorio actual para construir la imagen
+    build: .
+    
+    # Mapea el puerto del host (8000) al puerto del contenedor (8000)
+    ports:
+      - "8000:8000"
+      
+    # Mapea tu directorio local al directorio de trabajo del contenedor.
+    # Esto es crucial para el desarrollo: cualquier cambio en tu código local se refleja inmediatamente
+    # dentro del contenedor sin necesidad de reconstruir la imagen.
+    volumes:
+      - .:/app
+      
+    # (Opcional) Reinicia si el contenedor falla, pero no si se detiene manualmente
+    restart: unless-stopped
+    
+    # Ejecuta el comando de inicio, pero con la opción --reload para desarrollo
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
